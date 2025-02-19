@@ -6,12 +6,22 @@ public class Manga {
   private int mangakaID; // foreign key in books table
   // private Genre genres;
   private Status status; // e.g. ongoing, haitus, etc.
+  private String mangakaName;
 
-  public Manga(String title, int publicationYear, int mangakaID, Status status) {
+  public Manga(String title, int publicationYear, Status status, int mangakaID) {
     this.title = title;
     this.publicationYear = publicationYear;
-    this.mangakaID = mangakaID;
     this.status = status;
+    this.mangakaID = mangakaID;
+  }
+
+  public Manga(int id, String title, int publicationYear, Status status, int mangakaID, String mangakaName) {
+    this.id = id; // stores id when fetching from db
+    this.title = title;
+    this.publicationYear = publicationYear;
+    this.status = status;
+    this.mangakaID = mangakaID;
+    this.mangakaName = mangakaName; // printing name
   }
 
   public int getId() {
@@ -34,8 +44,20 @@ public class Manga {
     this.publicationYear = publicationYear;
   }
 
+  public Status getStatus() {
+    return status;
+  }
+
+  public void setStatus(Status status) {
+    this.status = status;
+  }
+
   public int getMangakaID() {
     return mangakaID;
+  }
+
+  public String getMangakaName() {
+    return mangakaName;
   }
 
   @Override

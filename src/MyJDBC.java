@@ -3,11 +3,12 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
+// testing class - prints results
 public class MyJDBC {
   public static void main(String[] args) {
 
     try {
+      // url, username, password
       Connection connection = DriverManager.getConnection();
 
       Statement statement = connection.createStatement();

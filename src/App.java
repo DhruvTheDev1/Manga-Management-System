@@ -14,9 +14,10 @@ public class App {
 
         // System.out.println("added");
 
-        // print results
-        MangaDAO mangaDAO = new MangaDaoImpl();
+        // print results - debugging
 
+        MangaDAO mangaDAO = new MangaDaoImpl();
+        
         List<Manga> mangaList = mangaDAO.getAllMangas();
         for (Manga manga : mangaList) {
             System.out.println("ID: " + manga.getId());
@@ -28,5 +29,13 @@ public class App {
             System.out.println("-------------------");
 
         }
+
+        // your name - adding by mangaka name
+        // MangaDAO mangaDAO = new MangaDaoImpl();
+        // mangaDAO.addManga(new Manga("Your Name", 2016, Status.COMPLETED, "Makoto Shinkai"));
+
+        // existing mangaka 
+        // MangaDAO mangaDAO = new MangaDaoImpl();
+        // mangaDAO.addManga(new Manga("Romance Dawn", 1996, Status.COMPLETED, "Eiichiro Oda"));
     }
 }

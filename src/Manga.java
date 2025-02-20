@@ -8,11 +8,11 @@ public class Manga {
   private Status status; // e.g. ongoing, haitus, etc.
   private String mangakaName;
 
-  public Manga(String title, int publicationYear, Status status, int mangakaID) {
+  public Manga(String title, int publicationYear, Status status, String mangakaName) {
     this.title = title;
     this.publicationYear = publicationYear;
     this.status = status;
-    this.mangakaID = mangakaID;
+    this.mangakaName = mangakaName; // create manga object by mangaka name
   }
 
   public Manga(int id, String title, int publicationYear, Status status, int mangakaID, String mangakaName) {
@@ -58,6 +58,10 @@ public class Manga {
 
   public String getMangakaName() {
     return mangakaName;
+  }
+
+  public void setMangakaName(String mangakaName) {
+    this.mangakaName = mangakaName;
   }
 
   @Override

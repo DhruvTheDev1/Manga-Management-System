@@ -2,14 +2,20 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MangaDaoImpl implements MangaDAO {
+  private MangakaDAO mangakaDAO = new MangakaDaoImpl();
 
-  @Override
+  @Override // adds a manga to the db
   public void addManga(Manga manga) {
+    // get mangaka id
+    int mangakaId = mangakaDAO.getMangakaId(manga.getMangakaName());
+    if (mangakaId == 0) { // does not exist - creates one
+      mangakaId = mangakaDAO.createMangaka(manga.getMangakaName());
+    }
+
     String addManga = "INSERT INTO manga(title, publicationYear, status, mangakaID) VALUES(?, ?, ?, ?)";
 
     try (Connection connection = DatabaseConnection.getConnection();
@@ -17,17 +23,16 @@ public class MangaDaoImpl implements MangaDAO {
       statement.setString(1, manga.getTitle());
       statement.setInt(2, manga.getPublicationYear());
       statement.setString(3, manga.getStatus().toString());
-      statement.setInt(4, manga.getMangakaID());
+      statement.setInt(4, mangakaId);
 
       statement.executeUpdate();
 
     } catch (SQLException e) {
       e.printStackTrace();
     }
-
   }
 
-  @Override
+  @Override // retrieves all manga from db
   public List<Manga> getAllMangas() {
     List<Manga> mangas = new ArrayList<>();
     String getAllMangas = "SELECT * FROM manga " +

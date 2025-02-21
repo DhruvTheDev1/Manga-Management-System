@@ -2,6 +2,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,7 @@ public class MangaDaoImpl implements MangaDAO {
   private MangakaDAO mangakaDAO = new MangakaDaoImpl();
 
   @Override // adds a manga to the db
-  public void addManga(Manga manga) {
+  public boolean addManga(Manga manga) {
     // get mangaka id
     int mangakaId = mangakaDAO.getMangakaId(manga.getMangakaName());
     if (mangakaId == 0) { // does not exist - creates one
@@ -25,11 +26,19 @@ public class MangaDaoImpl implements MangaDAO {
       statement.setString(3, manga.getStatus().toString());
       statement.setInt(4, mangakaId);
 
-      statement.executeUpdate();
+      int rowsAffected = statement.executeUpdate();
+      return rowsAffected > 0;
 
     } catch (SQLException e) {
-      e.printStackTrace();
+      if (e instanceof SQLIntegrityConstraintViolationException) {
+        // duplicate entry
+        System.out.println("Duplicate entry");
+      } else {
+        // other sql exception
+        e.printStackTrace();
+      }
     }
+    return false;
   }
 
   @Override // retrieves all manga from db
@@ -59,4 +68,50 @@ public class MangaDaoImpl implements MangaDAO {
     return mangas;
   }
 
+  @Override
+  public Manga getMangaByTitle(String title) {
+
+    List<Manga> getMangaByTitle = getAllMangas();
+
+    for(Manga manga :getMangaByTitle) {
+      if (manga.getTitle().equalsIgnoreCase(title)) {
+        return manga;
+      }
+    }
+    return null;
+  }
+
+
+  @Override // deletes manga
+  public boolean deleteManga(String mangaTitle) {
+
+    Manga deleteByTitle = getMangaByTitle(mangaTitle);
+    if (deleteByTitle != null) {
+      int mangaToDeleteId = deleteByTitle.getId();
+
+      String deleteQuery = "DELETE FROM manga WHERE idmanga = ?";
+
+      try (Connection connection = DatabaseConnection.getConnection();
+      PreparedStatement pDelete = connection.prepareStatement(deleteQuery)) {
+        
+        pDelete.setInt(1, mangaToDeleteId);
+        int rowsAffected = pDelete.executeUpdate();
+        return rowsAffected > 0;
+
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+
+    } 
+    return false;
+   
+  }
+
+  @Override
+  public boolean updateManga(Manga manga) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'updateManga'");
+  }
+
+  
 }

@@ -73,14 +73,13 @@ public class MangaDaoImpl implements MangaDAO {
 
     List<Manga> getMangaByTitle = getAllMangas();
 
-    for(Manga manga :getMangaByTitle) {
+    for (Manga manga : getMangaByTitle) {
       if (manga.getTitle().equalsIgnoreCase(title)) {
         return manga;
       }
     }
     return null;
   }
-
 
   @Override // deletes manga
   public boolean deleteManga(String mangaTitle) {
@@ -92,8 +91,8 @@ public class MangaDaoImpl implements MangaDAO {
       String deleteQuery = "DELETE FROM manga WHERE idmanga = ?";
 
       try (Connection connection = DatabaseConnection.getConnection();
-      PreparedStatement pDelete = connection.prepareStatement(deleteQuery)) {
-        
+          PreparedStatement pDelete = connection.prepareStatement(deleteQuery)) {
+
         pDelete.setInt(1, mangaToDeleteId);
         int rowsAffected = pDelete.executeUpdate();
         return rowsAffected > 0;
@@ -102,16 +101,38 @@ public class MangaDaoImpl implements MangaDAO {
         e.printStackTrace();
       }
 
-    } 
+    }
     return false;
-   
+
   }
 
-  @Override
+  @Override // update manga
   public boolean updateManga(Manga manga) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'updateManga'");
-  }
+    String updateQuery = "UPDATE manga SET title = ?, publicationYear = ?, Status = ?, mangakaId = ? WHERE idmanga =?";
 
-  
+    try (Connection connection = DatabaseConnection.getConnection();
+        PreparedStatement statement = connection.prepareStatement(updateQuery)) {
+
+      statement.setString(1, manga.getTitle());
+      statement.setInt(2, manga.getPublicationYear());
+      statement.setString(3, manga.getStatus().toString());
+
+      int mangakaId = mangakaDAO.getMangakaId(manga.getMangakaName());
+      if (mangakaId == 0) {
+        mangakaId = mangakaDAO.createMangaka(manga.getMangakaName());
+      }
+
+      statement.setInt(4, mangakaId);
+      statement.setInt(5, manga.getId());
+
+      int rowsAffected = statement.executeUpdate();
+      return rowsAffected > 0;
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+      ;
+    }
+    return false;
+  } // end of method
+
 }

@@ -68,7 +68,8 @@ public class Manga {
   public String toString() {
     return "Manga Title: " + this.title + "\n" +
         "Publication Year: " + this.publicationYear + "\n" +
-        "Status: " + this.status;
+        "Status: " + this.status + "\n" + 
+        "Mangaka " + this.mangakaName;
   }
 
 }

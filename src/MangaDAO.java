@@ -9,6 +9,6 @@ public interface MangaDAO {
 
   public boolean deleteManga(String mangaTitle);
 
-public boolean updateManga(Manga manga);
+  public boolean updateManga(Manga manga);
 
 }

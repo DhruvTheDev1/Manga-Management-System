@@ -9,7 +9,7 @@ public class MyJDBC {
 
     try {
       // url, username, password
-      Connection connection = DriverManager.getConnection("");
+      Connection connection = DriverManager.getConnection("", "", "");
 
       Statement statement = connection.createStatement();
 

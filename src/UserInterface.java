@@ -31,9 +31,14 @@ public class UserInterface {
         updateManga();
       } else if (userChoice == 5) { // delete manga
         deleteManga();
+      } else if (userChoice == 6) { 
+        System.out.println("Exiting Manga Management");
+        break;
+      } else {
+        System.out.println("Please enter a valid choice");
       }
-
     }
+    scanner.close();
   }
 
   // view all mangas
@@ -59,32 +64,8 @@ public class UserInterface {
     System.out.println("Enter Publication Year");
     int year = Integer.parseInt(scanner.nextLine());
 
-    Status status;
-    System.out.println("Pick Status: ");
-    System.out.println("1. COMPLETED");
-    System.out.println("2. ONGOING");
-    System.out.println("3. HIATUS");
-    System.out.println("4. CANCELLED");
-
-    while (true) {
-      int statusChoice = Integer.parseInt(scanner.nextLine());
-
-      if (statusChoice == 1) {
-        status = Status.COMPLETED;
-        break;
-      } else if (statusChoice == 2) {
-        status = Status.ONGOING;
-        break;
-      } else if (statusChoice == 3) {
-        status = Status.HIATUS;
-        break;
-      } else if (statusChoice == 4) {
-        status = Status.CANCELLED;
-        break;
-      } else {
-        System.out.println("Invalid Choice");
-      }
-    }
+    System.out.println("Enter Status: ");
+    Status status = getStatus(null);
 
     System.out.println("Enter Mangaka Name");
     String mangakaName = scanner.nextLine();
@@ -122,7 +103,7 @@ public class UserInterface {
     if (mangaUpdate == null) {
       System.out.println("Manga Not Found");
       return;
-      
+
     } else {
       System.out.println("Manga Details: ");
       System.out.println(mangaUpdate); // prints manga details
@@ -141,67 +122,26 @@ public class UserInterface {
         mangaUpdate.setPublicationYear(Integer.parseInt(newPublicationYear));
       }
 
-      Status status = mangaUpdate.getStatus();
-      System.out.println("Pick Status (leave empty to leave as before)");
-      System.out.println("1. COMPLETED");
-      System.out.println("2. ONGOING");
-      System.out.println("3. HIATUS");
-      System.out.println("4. CANCELLED");
-
-      while (true) {
-        String input = scanner.nextLine();
-        if (input.isBlank()) {
-          break;
-        }
-
-        int statusChoice = Integer.parseInt(input);
-
-        if (statusChoice == 1) {
-          status = Status.COMPLETED;
-          break;
-        } else if (statusChoice == 2) {
-          status = Status.ONGOING;
-          break;
-        } else if (statusChoice == 3) {
-          status = Status.HIATUS;
-          break;
-        } else if (statusChoice == 4) {
-          status = Status.CANCELLED;
-          break;
-        } else {
-          System.out.println("Invalid Choice, Default Choice: Completed");
-          status = Status.COMPLETED;
-          break;
-        }
-      }
-
-      // updates if new status selected
+      Status status = getStatus(mangaUpdate.getStatus());
       if (status != mangaUpdate.getStatus()) {
         mangaUpdate.setStatus(status);
       }
+
+      System.out.println("Enter New Mangaka Name (leave empty to leave as before)");
+      String newMangaka = scanner.nextLine();
+
+      if (!newMangaka.isBlank()) {
+        mangaUpdate.setMangakaName(newMangaka);
+      }
+
+      boolean updated = mangaDao.updateManga(mangaUpdate);
+      if (updated) {
+        System.out.println("Manga Updated");
+      } else {
+        System.out.println("Error Updating");
+      }
+
     }
-
-    // simpler update status - lets user enter the values
-    // System.out.print("Enter new status or empty to leave");
-    // String status = scanner.nextLine();
-    // if (!status.isBlank()) {
-    // mangaToUpdate.setStatus(Status.valueOf(status.toUpperCase()));
-    // }
-
-    System.out.println("Enter New Mangaka Name (leave empty to leave as before)");
-    String newMangaka = scanner.nextLine();
-
-    if (!newMangaka.isBlank()) {
-      mangaUpdate.setMangakaName(newMangaka);
-    }
-
-    boolean updated = mangaDao.updateManga(mangaUpdate);
-    if (updated) {
-      System.out.println("Manga Updated");
-    } else {
-      System.out.println("Error Updating");
-    }
-
   }
 
   // delete manga
@@ -215,6 +155,37 @@ public class UserInterface {
       System.out.println("Manga " + mangaTitleToDelete + " Deleted Successfully");
     } else {
       System.out.println("No manga found with: " + mangaTitleToDelete);
+    }
+  }
+
+  // helper method for getting status
+  // used in addManga and updateManga
+  private Status getStatus(Status currentStatus) {
+    System.out.println("Pick Status: ");
+    System.out.println("1. COMPLETED");
+    System.out.println("2. ONGOING");
+    System.out.println("3. HIATUS");
+    System.out.println("4. CANCELLED");
+
+    while (true) {
+      String input = scanner.nextLine();
+      if (input.isBlank()) {
+        return currentStatus;
+      }
+      int statusChoice = Integer.parseInt(input);
+
+      if (statusChoice == 1) {
+        return Status.COMPLETED;
+      } else if (statusChoice == 2) {
+        return Status.ONGOING;
+      } else if (statusChoice == 3) {
+        return Status.HIATUS;
+      } else if (statusChoice == 4) {
+        return Status.CANCELLED;
+      } else {
+        System.out.println("Invalid Choice, Default Choice: Completed");
+        return Status.COMPLETED;
+      }
     }
   }
 

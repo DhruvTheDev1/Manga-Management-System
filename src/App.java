@@ -17,19 +17,19 @@ public class App {
 
         // print results - debugging
 
-        MangaDAO mangaDAO = new MangaDaoImpl();
+        // MangaDAO mangaDAO = new MangaDaoImpl();
 
-        List<Manga> mangaList = mangaDAO.getAllMangas();
-        for (Manga manga : mangaList) {
-        System.out.println("ID: " + manga.getId());
-        System.out.println("Title " + manga.getTitle());
-        System.out.println("Year " + manga.getPublicationYear());
-        System.out.println("Status: " + manga.getStatus());
-        System.out.println("Mangaka: " + manga.getMangakaID());
-        System.out.println("Mangaka Name: " + manga.getMangakaName());
-        System.out.println("-------------------");
+        // List<Manga> mangaList = mangaDAO.getAllMangas();
+        // for (Manga manga : mangaList) {
+        // System.out.println("ID: " + manga.getId());
+        // System.out.println("Title " + manga.getTitle());
+        // System.out.println("Year " + manga.getPublicationYear());
+        // System.out.println("Status: " + manga.getStatus());
+        // System.out.println("Mangaka: " + manga.getMangakaID());
+        // System.out.println("Mangaka Name: " + manga.getMangakaName());
+        // System.out.println("-------------------");
 
-        }
+        // }
 
         // adding by mangaka name
         // MangaDAO mangaDAO = new MangaDaoImpl();
@@ -131,6 +131,9 @@ public class App {
     //         System.out.println("Error updating");
     //     }
     //     scanner.close();
+
+    UserInterface ui = new UserInterface();
+    ui.start();
 
     }
 

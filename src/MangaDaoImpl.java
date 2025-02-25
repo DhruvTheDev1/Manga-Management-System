@@ -130,7 +130,6 @@ public class MangaDaoImpl implements MangaDAO {
 
     } catch (SQLException e) {
       e.printStackTrace();
-      ;
     }
     return false;
   } // end of method

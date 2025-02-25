@@ -69,7 +69,7 @@ public class Manga {
     return "Manga Title: " + this.title + "\n" +
         "Publication Year: " + this.publicationYear + "\n" +
         "Status: " + this.status + "\n" + 
-        "Mangaka " + this.mangakaName;
+        "Mangaka: " + this.mangakaName;
   }
 
 }

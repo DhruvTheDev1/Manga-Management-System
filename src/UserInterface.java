@@ -46,11 +46,10 @@ public class UserInterface {
     List<Manga> mangaList = mangaDao.getAllMangas();
 
     for (Manga manga : mangaList) {
-      System.out.println(manga);
-      System.out.println("Title " + manga.getTitle());
-      System.out.println("Year " + manga.getPublicationYear());
+      System.out.println("Title: " + manga.getTitle());
+      System.out.println("Year: " + manga.getPublicationYear());
       System.out.println("Status: " + manga.getStatus());
-      System.out.println("Mangaka Name: " + manga.getMangakaName());
+      System.out.println("Mangaka: " + manga.getMangakaName());
       System.out.println("-------------------");
     }
 

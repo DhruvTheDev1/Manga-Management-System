@@ -63,6 +63,7 @@ A Manga Management System built using Java and MySQL database, implementing Obje
   - If mangaka exists uses that id
   - Or else creates new mangaka entry for mangaka table and uses that id
 - title is unique index and add manga contains sql integrity exception to avoid duplicates
+- The application currently does not include the URL, USER, PASSWORD details in databaseConnection.java
 
 ## Further Work
 - Web-based UI: Implementing a web based front-end
